@@ -1,1 +1,1 @@
-
+entrypoint = "MediSpeak_AI.api:app"
