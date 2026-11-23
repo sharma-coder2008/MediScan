@@ -1,2 +1,14 @@
+[project]
+name = "mediscan"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi",
+    "pydantic",
+    "pillow",
+    "google-genai",
+    "python-dotenv",
+]
+
 [tool.vercel]
 entrypoint = "MediSpeak_AI.api:app"
