@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
@@ -6,12 +7,14 @@ from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-try:
-    from .ai_reader import read_medicines_image
-except ImportError:
-    from ai_reader import read_medicines_image
-
 BASE_DIR = Path(__file__).resolve().parent
+
+# Vercel kabhi file path se import karta hai, isliye apna folder sys.path mein daal do
+if str(BASE_DIR) not in sys.path:
+    sys.path.insert(0, str(BASE_DIR))
+
+from ai_reader import read_medicines_image
+
 FRONTEND_DIR = BASE_DIR.parent / "frontend"
 
 app = FastAPI()
