@@ -1,4 +1,3 @@
-
 import io
 import base64
 import json
@@ -6,13 +5,21 @@ import json
 from PIL import Image
 from google import genai
 from google.genai import types
-try:
-    from .config import API_KEY, MODEL_NAME
-except ImportError:
-    from config import API_KEY, MODEL_NAME
+from config import API_KEY, MODEL_NAME
 
 
-client = genai.Client(api_key=API_KEY)
+_client = None
+
+
+def get_client():
+    # Client ko import time pe nahi, pehli request pe banao,
+    # taaki key missing ho toh poora app crash na ho.
+    global _client
+    if _client is None:
+        if not API_KEY:
+            raise RuntimeError("GEMINI_API_KEY environment variable is not set on the server.")
+        _client = genai.Client(api_key=API_KEY)
+    return _client
 
 
 def read_medicines_image(image_data, language="English"):
@@ -100,7 +107,7 @@ Return valid JSON only using this structure:
 """
 
         # 5. Send image to Gemini
-        response = client.models.generate_content(
+        response = get_client().models.generate_content(
             model=MODEL_NAME,
             contents=[
                 prompt,
