@@ -6,10 +6,19 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from PIL import Image
+from pathlib import Path
+from fastapi.responses import FileResponse
 
-from ai_reader import read_medicines_image
+try:
+    from .ai_reader import read_medicines_image
+except ImportError:
+    from ai_reader import read_medicines_image
 
 app = FastAPI()
+
+@app.get("/")
+def home():
+    return FileResponse(Path(__file__).parent / "index.html")
 
 app.add_middleware(
     CORSMiddleware,

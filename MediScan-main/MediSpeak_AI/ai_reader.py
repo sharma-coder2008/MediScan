@@ -6,7 +6,10 @@ import json
 from PIL import Image
 from google import genai
 from google.genai import types
-from config import API_KEY, MODEL_NAME
+try:
+    from .config import API_KEY, MODEL_NAME
+except ImportError:
+    from config import API_KEY, MODEL_NAME
 
 
 client = genai.Client(api_key=API_KEY)
