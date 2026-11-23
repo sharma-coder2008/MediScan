@@ -1,5 +1,0 @@
-fastapi
-pydantic
-pillow
-google-genai
-python-dotenv
