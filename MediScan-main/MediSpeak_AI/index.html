@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MediScan</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f7fb; margin: 0; padding: 24px; }
+    .card { max-width: 480px; margin: 40px auto; background: #fff; padding: 24px;
+            border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,.1); }
+    h1 { margin-top: 0; color: #0b6e4f; }
+    button { background: #0b6e4f; color: #fff; border: 0; padding: 10px 18px;
+             border-radius: 8px; cursor: pointer; margin-top: 12px; }
+    pre { background: #f1f1f1; padding: 12px; border-radius: 8px; white-space: pre-wrap; }
+    img { max-width: 100%; margin-top: 12px; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>MediScan</h1>
+    <p>Medicine strip ki photo upload karo.</p>
+    <input type="file" id="file" accept="image/*">
+    <img id="preview" style="display:none">
+    <br>
+    <button onclick="send()">Scan karo</button>
+    <pre id="out"></pre>
+  </div>
+
+  <script>
+    const ENDPOINT = "/predict"; // <-- apne api.py ke endpoint ka naam yahan daalo
+
+    document.getElementById("file").onchange = e => {
+      const img = document.getElementById("preview");
+      img.src = URL.createObjectURL(e.target.files[0]);
+      img.style.display = "block";
+    };
+
+    async function send() {
+      const f = document.getElementById("file").files[0];
+      const out = document.getElementById("out");
+      if (!f) { out.textContent = "Pehle image choose karo"; return; }
+      out.textContent = "Processing...";
+      const fd = new FormData();
+      fd.append("file", f); // field ka naam api.py ke parameter se match hona chahiye
+      try {
+        const r = await fetch(ENDPOINT, { method: "POST", body: fd });
+        out.textContent = JSON.stringify(await r.json(), null, 2);
+      } catch (err) {
+        out.textContent = "Error: " + err;
+      }
+    }
+  </script>
+</body>
+</html>
