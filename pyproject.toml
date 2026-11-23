@@ -1,0 +1,2 @@
+[tool.vercel]
+entrypoint = "MediSpeak_AI.api:app"

@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "MediSpeak_AI/api.py": {
+      "includeFiles": "frontend/**"
+    }
+  }
+}
